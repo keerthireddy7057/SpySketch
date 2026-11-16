@@ -46,6 +46,7 @@ const els = {
 };
 
 const ctx = els.board.getContext("2d");
+const pageRoomCode = new URLSearchParams(window.location.search).get("room")?.toUpperCase() || "";
 
 function toast(message) {
   els.toast.textContent = message;
@@ -74,6 +75,10 @@ function saveSession(code, playerId) {
   state.playerId = playerId;
   localStorage.setItem("spySketchCode", code);
   localStorage.setItem("spySketchPlayerId", playerId);
+}
+
+function goToRoom(code) {
+  window.location.href = `/room.html?room=${encodeURIComponent(code)}`;
 }
 
 function connectEvents() {
@@ -297,7 +302,7 @@ els.createBtn.addEventListener("click", async () => {
   try {
     const data = await post("/api/create", { name: els.nameInput.value });
     saveSession(data.code, data.playerId);
-    connectEvents();
+    goToRoom(data.code);
   } catch (error) {
     toast(error.message);
   }
@@ -310,7 +315,7 @@ els.joinBtn.addEventListener("click", async () => {
       code: els.codeInput.value
     });
     saveSession(data.code, data.playerId);
-    connectEvents();
+    goToRoom(data.code);
   } catch (error) {
     toast(error.message);
   }
@@ -367,7 +372,7 @@ els.clearBtn.addEventListener("click", () => {
 
 els.copyBtn.addEventListener("click", async () => {
   if (!state.code) return;
-  const inviteUrl = `${window.location.origin}${window.location.pathname}?room=${state.code}`;
+  const inviteUrl = `${window.location.origin}/join.html?room=${state.code}`;
   await navigator.clipboard.writeText(inviteUrl).catch(() => null);
   toast("Invite link copied.");
 });
@@ -406,8 +411,15 @@ els.board.addEventListener("pointerleave", async () => {
 
 setInterval(renderTimer, 500);
 clearCanvas();
-const inviteCode = new URLSearchParams(window.location.search).get("room");
-if (inviteCode && !state.code) {
-  els.codeInput.value = inviteCode.toUpperCase();
+if (pageRoomCode) {
+  els.codeInput.value = pageRoomCode;
+  const pathName = window.location.pathname.toLowerCase();
+  if (pathName.includes("join")) {
+    state.code = "";
+    state.playerId = "";
+  } else if (pathName.includes("room") && state.code !== pageRoomCode) {
+    state.code = pageRoomCode;
+    state.playerId = "";
+  }
 }
 if (state.code && state.playerId) connectEvents();
