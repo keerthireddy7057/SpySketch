@@ -1,0 +1,17 @@
+{
+  "name": "spysketch",
+  "version": "1.0.0",
+  "description": "A real-time multiplayer drawing and deduction game.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "game",
+    "multiplayer",
+    "drawing",
+    "node"
+  ],
+  "author": "",
+  "license": "MIT"
+}

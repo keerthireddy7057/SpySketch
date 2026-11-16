@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpySketch</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="topbar">
+        <div>
+          <p class="eyebrow">Multiplayer Drawing Deduction</p>
+          <h1>SpySketch</h1>
+        </div>
+        <div class="top-actions">
+          <div class="status-chip" id="statusChip">Offline</div>
+          <button id="helpBtn" class="ghost">How To Play</button>
+          <div class="room-chip" id="roomChip">No room</div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <aside class="panel side-panel">
+          <div id="homePanel">
+            <h2>Start Playing</h2>
+            <p class="home-tagline">Draw the clue, hide your confusion, and catch the player who never saw the word.</p>
+            <label>
+              Nickname
+              <input id="nameInput" maxlength="18" placeholder="Your name" />
+            </label>
+            <button id="createBtn" class="primary">Create Room</button>
+            <div class="join-row">
+              <input id="codeInput" maxlength="5" placeholder="CODE" />
+              <button id="joinBtn">Join</button>
+            </div>
+            <p class="hint">Share the room code with friends. Minimum 3 players to start.</p>
+          </div>
+
+          <div id="gamePanel" class="hidden">
+            <div class="stat-row">
+              <span>Round</span>
+              <strong id="roundText">0</strong>
+            </div>
+            <div class="stat-row">
+              <span>Timer</span>
+              <strong id="timerText">--</strong>
+            </div>
+            <div class="secret-card">
+              <span>Your word</span>
+              <strong id="wordText">Waiting</strong>
+            </div>
+            <div id="settingsPanel" class="settings-panel hidden">
+              <h2>Room Settings</h2>
+              <label>
+                Word Category
+                <select id="categorySelect"></select>
+              </label>
+              <label>
+                Round Time
+                <select id="timeSelect">
+                  <option value="45">45 seconds</option>
+                  <option value="60">60 seconds</option>
+                  <option value="90">90 seconds</option>
+                  <option value="120">120 seconds</option>
+                </select>
+              </label>
+            </div>
+            <div class="tools">
+              <label>
+                Color
+                <input id="colorInput" type="color" value="#151515" />
+              </label>
+              <label>
+                Size
+                <input id="sizeInput" type="range" min="2" max="18" value="5" />
+              </label>
+            </div>
+            <button id="clearBtn">Clear Board</button>
+            <button id="startBtn" class="primary hidden">Start Round</button>
+            <button id="revealBtn" class="primary hidden">Reveal Votes</button>
+            <button id="nextBtn" class="primary hidden">Play Again</button>
+          </div>
+        </aside>
+
+        <section class="panel stage">
+          <div class="stage-head">
+            <div>
+              <h2 id="phaseTitle">Create or join a room</h2>
+              <p id="phaseSubtitle">One player does not know the word. Can you find them?</p>
+            </div>
+            <button id="copyBtn" class="ghost hidden">Copy Invite Link</button>
+          </div>
+
+          <canvas id="board" width="960" height="620"></canvas>
+
+          <div id="votingPanel" class="vote-panel hidden">
+            <h3>Vote for the spy sketcher</h3>
+            <p id="votingStatus" class="vote-status"></p>
+            <div id="voteButtons" class="vote-buttons"></div>
+          </div>
+
+          <div id="resultPanel" class="result-panel hidden">
+            <h3 id="resultTitle">Result</h3>
+            <p id="resultText"></p>
+          </div>
+        </section>
+
+        <aside class="panel players-panel">
+          <h2>Players</h2>
+          <div id="playersList" class="players-list"></div>
+        </aside>
+      </section>
+    </main>
+
+    <div id="toast" class="toast hidden"></div>
+    <div id="helpModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="modal-card">
+        <div class="modal-head">
+          <h2 id="helpTitle">How To Play</h2>
+          <button id="closeHelpBtn" class="ghost">Close</button>
+        </div>
+        <ol class="rules-list">
+          <li>Create a room and share the room code with friends.</li>
+          <li>The host chooses a category and round time.</li>
+          <li>When the round starts, one player becomes the spy sketcher.</li>
+          <li>Normal players see the secret word. The spy sketcher sees only ???.</li>
+          <li>Everyone draws on the same canvas without revealing too much.</li>
+          <li>Vote for the player who seemed suspicious.</li>
+          <li>If the group catches the spy sketcher, artists score. If not, the spy sketcher scores.</li>
+        </ol>
+      </div>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>
